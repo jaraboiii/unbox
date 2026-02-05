@@ -30,12 +30,9 @@ export default function Home() {
               src="/unbox-logo.png"
               alt="Unbox Logo"
               fill
-              className="object-contain"
+              className="object-contain rounded-2xl"
             />
           </div>
-          <h2 className="text-5xl md:text-5xl font-semibold text-gray-800 dark:text-gray-100">
-            Unbox
-          </h2>
           <h2 className="text-3xl md:text-4xl font-light text-gray-800 dark:text-gray-100">
             Coming Soon
           </h2>
