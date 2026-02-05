@@ -826,19 +826,13 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                 
                 {/* Background Card (Card 2 - Memories) */}
                 <motion.div
-                  className="absolute inset-x-4 top-0 bottom-0 bg-white rounded-[2rem] shadow-xl border-2 border-[#FFBBC1] origin-bottom"
+                  className="absolute inset-x-4 top-0 bottom-0 bg-white rounded-[2rem] shadow-xl border-2 border-[#FFBBC1] origin-bottom cursor-pointer"
                   animate={finalCardIndex === 1 ? 
                     { top: 0, scale: 1, rotate: 0, zIndex: 30 } : 
                     { top: '2rem', scale: 0.92, rotate: 3, zIndex: 5 } // ซ้อนอยู่หลัง
                   }
                   transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 25 }}
-                  drag={finalCardIndex === 1 ? "y" : false}
-                  dragConstraints={{ top: 0, bottom: 0 }}
-                  dragElastic={0.1}
-                  onDragEnd={(_, info) => {
-                    // Card 2: Swipe DOWN to go back to Card 1
-                    if (info.offset.y > 50) setFinalCardIndex(0);
-                  }}
+                  onClick={() => setFinalCardIndex(finalCardIndex === 1 ? 0 : 1)}
                   style={{ height: '100%' }}
                 >
                    {/* Card 2 Content (Memories) */}
@@ -855,33 +849,33 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                       </div>
 
                       <div className="flex-grow flex items-center relative z-10 min-h-[300px]">
-                        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 px-1 no-scrollbar w-full h-full items-center">
+                        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 px-1 no-scrollbar w-full h-full items-center" onClick={(e) => e.stopPropagation()}>
                           {validEventImages.map((img, idx) => (
                               <motion.div 
                                 key={idx} 
                                 className="snap-center shrink-0 w-[260px] h-[340px] bg-white p-3 shadow-md rounded-xl border border-gray-100 flex flex-col transform cursor-pointer hover:scale-[1.02] transition-transform"
-                                onClick={() => setSelectedEventCard(idx)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedEventCard(idx);
+                                }}
                                 whileTap={{ scale: 0.98 }}
                               >
-                                  {/* Tape */}
-                                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-[#FFBBC1]/80 opacity-80 rotate-1 z-20"></div>
-                                  
-                                  <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden mb-3 bg-gray-50 shadow-inner">
-                                      <Image 
-                                        src={img} 
-                                        alt={`Event ${idx+1}`} 
-                                        fill 
-                                        className="object-cover" 
-                                        sizes="(max-width: 768px) 100vw, 33vw"
-                                        quality={90}
-                                      />
-                                  </div>
-                                  <h4 className="font-bold text-gray-700 text-lg truncate mb-1 text-center">{imageCaptions?.[idx]}</h4>
-                                  <div className="flex-grow overflow-y-auto custom-scrollbar bg-gray-50/50 rounded p-2 border border-gray-100/50">
-                                     <p className="text-sm text-gray-500 font-light italic leading-relaxed text-center">
-                                       "{eventDescriptions?.[idx]}"
-                                     </p>
-                                  </div>
+                                <div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden mb-3 bg-gray-50 shadow-inner">
+                                    <Image 
+                                      src={img} 
+                                      alt={`Event ${idx+1}`} 
+                                      fill 
+                                      className="object-cover" 
+                                      sizes="(max-width: 768px) 100vw, 33vw"
+                                      quality={90}
+                                    />
+                                </div>
+                                <h4 className="font-bold text-gray-700 text-lg truncate mb-1 text-center">{imageCaptions?.[idx]}</h4>
+                                <div className="flex-grow overflow-y-auto custom-scrollbar bg-gray-50/50 rounded p-2 border border-gray-100/50">
+                                    <p className="text-sm text-gray-500 font-light italic leading-relaxed text-center">
+                                      "{eventDescriptions?.[idx]}"
+                                    </p>
+                                </div>
                               </motion.div>
                           ))}
                         </div>
@@ -890,7 +884,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                 </motion.div>
 
                 <motion.div
-                  className="relative bg-[#FFF9F0] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center border-[6px] border-white ring-1 ring-gray-200/50 origin-bottom"
+                  className="relative bg-[#FFF9F0] rounded-[2rem] shadow-2xl overflow-hidden flex flex-col items-center border-[6px] border-white ring-1 ring-gray-200/50 origin-bottom cursor-pointer"
                   style={{
                     backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ff0000' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
                   }}
@@ -899,12 +893,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                     { y: 20, scale: 0.92, opacity: 0.8, rotate: -3, zIndex: 0 }
                   }
                   transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 25 }}
-                  drag={finalCardIndex === 0 ? "y" : false}
-                  dragConstraints={{ top: 0, bottom: 0 }}
-                  dragElastic={0.1}
-                  onDragEnd={(_, info) => {
-                    if (info.offset.y < -50) setFinalCardIndex(1);
-                  }}
+                  onClick={() => setFinalCardIndex(finalCardIndex === 0 ? 1 : 0)}
                 >
                   <div className="absolute inset-3 border-2 border-dashed border-[#FFB5B5] rounded-[1.5rem] pointer-events-none"></div>
 
