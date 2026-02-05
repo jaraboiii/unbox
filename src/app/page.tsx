@@ -49,7 +49,7 @@ export default function Home() {
         {/* Line Button */}
         <motion.div variants={slideUp} className="pt-8">
           <a
-            href="https://line.me/R/ti/p/@unboxforyou" 
+            href="https://lin.ee/aQ0Gw8G" 
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 bg-[#06C755] hover:bg-[#05b64d] text-white rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1 group"
