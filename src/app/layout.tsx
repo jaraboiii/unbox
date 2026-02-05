@@ -12,6 +12,11 @@ const kanit = Kanit({
 export const metadata: Metadata = {
   title: "Unbox - การ์ดอวยพรออนไลน์",
   description: "Unbox การ์ดอวยพรออนไลน์",
+  icons: {
+    icon: "/unbox-logo.png",
+    shortcut: "/unbox-logo.png",
+    apple: "/unbox-logo.png",
+  },
 };
 
 export default function RootLayout({

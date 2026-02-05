@@ -25,10 +25,18 @@ export default function Home() {
         className="relative z-10 max-w-2xl w-full text-center space-y-8"
       >
         {/* Logo / Brand Name */}
-        <motion.div variants={fadeIn} className="mb-6">
-          <h1 className="text-6xl md:text-8xl font-extralight tracking-tighter text-gray-900 dark:text-white">
+        <motion.div variants={fadeIn}>
+          <div className="relative w-50 h-50 mx-auto">
+            <Image
+              src="/unbox-logo.png"
+              alt="Unbox Logo"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <h2 className="text-5xl md:text-5xl font-semibold text-gray-800 dark:text-gray-100">
             Unbox
-          </h1>
+          </h2>
         </motion.div>
 
         {/* Coming Soon Text */}
