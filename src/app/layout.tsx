@@ -10,8 +10,8 @@ const kanit = Kanit({
 });
 
 export const metadata: Metadata = {
-  title: "Unbox - Clean Architecture",
-  description: "Modern web application with Clean Architecture and Framer Motion",
+  title: "Unbox - การ์ดอวยพรออนไลน์",
+  description: "Unbox การ์ดอวยพรออนไลน์",
 };
 
 export default function RootLayout({
