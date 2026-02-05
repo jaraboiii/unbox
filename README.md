@@ -1,36 +1,223 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Unbox - Clean Architecture with Framer Motion
 
-## Getting Started
+โปรเจค Next.js ที่ออกแบบด้วย **Clean Architecture** พร้อม **Framer Motion** สำหรับ Interactive Animations และใช้ฟอนต์ **Kanit** จาก Google Fonts
 
-First, run the development server:
+## 🎯 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- ✅ **Clean Architecture** - โครงสร้างแบบ Clean Architecture แยก layers ชัดเจน
+- ✅ **Framer Motion** - Animations สวยงามและ smooth
+- ✅ **Kanit Font** - ฟอนต์ภาษาไทยที่สวยงามจาก Google Fonts
+- ✅ **Next.js 16** - React framework ล่าสุด
+- ✅ **React 19** - React เวอร์ชันล่าสุด
+- ✅ **Tailwind CSS v4** - Utility-first CSS framework
+- ✅ **TypeScript** - Type safety
+
+## 📁 โครงสร้างโฟลเดอร์
+
+```
+src/
+├── app/                          # Next.js App Router
+│   ├── layout.tsx               # Root layout with Kanit font
+│   ├── page.tsx                 # Home page
+│   └── globals.css              # Global styles
+│
+├── core/                         # Business Logic Layer
+│   ├── domain/                   # Domain Layer
+│   │   ├── entities/             # Domain entities (User, Product, etc.)
+│   │   ├── value-objects/        # Value objects
+│   │   └── repositories/         # Repository interfaces
+│   │
+│   └── use-cases/                # Application Business Rules
+│       └── products.ts           # Product use cases
+│
+├── infrastructure/               # External Concerns
+│   ├── api/                      # API clients
+│   ├── repositories/             # Repository implementations
+│   │   └── MockProductRepository.ts
+│   ├── services/                 # External services
+│   └── config/                   # Configuration files
+│
+├── presentation/                 # UI Layer
+│   ├── components/               # React Components
+│   │   ├── ui/                   # Base UI components
+│   │   │   ├── Button.tsx
+│   │   │   └── Card.tsx
+│   │   ├── features/             # Feature-specific components
+│   │   └── layout/               # Layout components
+│   │
+│   ├── hooks/                    # Custom React hooks
+│   │   └── useScrollAnimation.ts
+│   │
+│   ├── contexts/                 # React contexts
+│   ├── animations/               # Framer Motion animations
+│   │   └── variants.ts
+│   └── styles/                   # Global styles & theme
+│
+└── shared/                       # Shared utilities
+    ├── types/                    # TypeScript types & interfaces
+    ├── constants/                # Constants
+    ├── utils/                    # Utility functions
+    └── helpers/                  # Helper functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+ 
+- npm or yarn or pnpm
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Install dependencies
+npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Run development server
+npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Build for production
+npm run build
 
-## Deploy on Vercel
+# Start production server
+npm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🏗️ Clean Architecture Principles
+
+### 1. Dependency Rule
+- Dependencies ชี้จากนอกเข้าใน
+- Core layer ไม่ต้องรู้จัก Infrastructure หรือ Presentation
+- Inner layers ไม่มี dependency กับ outer layers
+
+### 2. Layers
+
+#### **Core Layer** (ชั้นในสุด)
+- `domain/`: Entities, Value Objects, Repository Interfaces
+- `use-cases/`: Business logic, application rules
+- ไม่มี dependencies กับ framework หรือ external libraries
+
+#### **Infrastructure Layer**
+- API clients, Database connections
+- Implementations ของ repository interfaces
+- External services integration
+
+#### **Presentation Layer** (ชั้นนอกสุด)
+- React Components, Hooks, Contexts
+- Framer Motion animations
+- UI/UX specific code
+
+#### **Shared Layer**
+- Utilities, Types, Constants
+- ใช้ร่วมกันได้ทุก layer
+
+## ✨ Framer Motion Animations
+
+### Animation Variants
+
+โปรเจคมี animation variants พร้อมใช้งาน:
+
+```typescript
+import { fadeIn, slideUp, scaleIn } from "@/presentation/animations/variants";
+```
+
+- `fadeIn` - Fade in animation
+- `slideUp` - Slide up with fade
+- `slideDown` - Slide down with fade
+- `scaleIn` - Scale in animation
+- `staggerContainer` - Stagger children
+- `bounce` - Bounce animation
+- และอื่นๆ
+
+### Custom Hooks
+
+```typescript
+import { useScrollAnimation } from "@/presentation/hooks/useScrollAnimation";
+
+const { ref, isInView } = useScrollAnimation();
+```
+
+## 🎨 Components
+
+### Button Component
+
+```tsx
+import { Button } from "@/presentation/components/ui/Button";
+
+<Button variant="primary" size="lg">
+  Click me
+</Button>
+```
+
+### Card Component
+
+```tsx
+import { Card } from "@/presentation/components/ui/Card";
+
+<Card>
+  <h3>Card Title</h3>
+  <p>Card content</p>
+</Card>
+```
+
+## 🔤 Kanit Font
+
+ฟอนต์ Kanit ถูก configure แล้วใน `app/layout.tsx`:
+
+- รองรับภาษาไทยและภาษาอังกฤษ
+- มี weights ครบทุกแบบ (100-900)
+- Auto-optimized โดย Next.js
+
+## 📝 Example Usage
+
+### Creating a Use Case
+
+```typescript
+// src/core/use-cases/my-use-case.ts
+import { IProductRepository } from "../domain/repositories";
+
+export class MyUseCase {
+  constructor(private productRepository: IProductRepository) {}
+  
+  async execute(params: any) {
+    // Business logic here
+  }
+}
+```
+
+### Creating a Repository Implementation
+
+```typescript
+// src/infrastructure/repositories/MyRepository.ts
+import { IProductRepository } from "@/core/domain/repositories";
+
+export class MyRepository implements IProductRepository {
+  // Implementation
+}
+```
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Language**: TypeScript
+- **Font**: Kanit (Google Fonts)
+
+## 📖 Learn More
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Framer Motion Documentation](https://www.framer.com/motion/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+## 📄 License
+
+MIT
+
+---
+
+สร้างด้วย ❤️ โดยใช้ Next.js, React, Framer Motion และ Tailwind CSS
