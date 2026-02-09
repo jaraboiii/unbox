@@ -141,7 +141,6 @@ export default function Home() {
         </div>
       </motion.header>
 
-
       <main className="container mx-auto px-6 py-20">
         <div className="max-w-5xl mx-auto">
 
@@ -184,7 +183,6 @@ export default function Home() {
               ส่งความรู้สึกพิเศษให้คนที่คุณรัก
             </motion.p>
           </motion.div>
-
 
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -238,7 +236,6 @@ export default function Home() {
               </motion.div>
             </div>
 
-
             <div className="p-8 md:p-12 space-y-8">
               <h3 className="text-2xl font-light text-gray-900 dark:text-white mb-8">
                 ข้อมูลการ์ด
@@ -260,7 +257,95 @@ export default function Home() {
                 />
               </div>
 
+              <div className="space-y-3">
+                <label htmlFor="receiver" className="block text-sm font-light text-gray-700 dark:text-gray-300">
+                  ชื่อผู้รับ
+                </label>
+                <input
+                  id="receiver"
+                  type="text"
+                  value={receiverName}
+                  onChange={(e) => setReceiverName(e.target.value)}
+                  placeholder="ชื่อคนพิเศษของคุณ"
+                  disabled={isCreating}
+                  className="w-full px-6 py-4 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all duration-300 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 font-light disabled:opacity-50"
+                />
+              </div>
 
+              <div className="space-y-3">
+                <label className="block text-sm font-light text-gray-700 dark:text-gray-300">
+                  รหัสลับ 8 หลัก <span className="text-gray-400">(เช่น วันครบรอบ, วันเกิด)</span>
+                </label>
+                <div className="flex gap-2 justify-center">
+                  {[...Array(8)].map((_, i) => (
+                    <div 
+                      key={i}
+                      className={`relative w-10 h-12 rounded-lg border-2 flex items-center justify-center text-lg font-medium transition-all duration-200
+                        ${i < passcode.length 
+                          ? 'border-rose-400 bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:border-rose-500/50 dark:text-rose-400' 
+                          : 'border-gray-200 bg-white/50 text-gray-400 dark:border-gray-700/50 dark:bg-gray-800/50'}
+                      `}
+                    >
+                      {i < passcode.length ? passcode[i] : ''}
+                      {i === passcode.length && !isCreating && (
+                        <motion.div
+                          layoutId="cursor"
+                          className="absolute inset-0 border-2 border-rose-500 rounded-lg animate-pulse"
+                          transition={{ duration: 0.2 }}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={8}
+                  value={passcode}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, '').slice(0, 8);
+                    setPasscode(val);
+                  }}
+                  className="absolute opacity-0 w-full h-12 -mt-12 cursor-text"
+                  disabled={isCreating}
+                />
+                <div className="text-center text-xs text-gray-400">
+                  {passcode.length === 0 ? "เพิ่มความปลอดภัยให้การ์ดของคุณ" : `${passcode.length}/8 ตัวเลข`}
+                </div>
+                
+                {passcode.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="pt-2"
+                  >
+                     <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
+                       คำถามสำหรับรหัสลับ <span className="text-red-400">*</span>
+                     </label>
+                     <input
+                       type="text"
+                       value={passcodeHint}
+                       onChange={(e) => setPasscodeHint(e.target.value)}
+                       placeholder="เช่น วันครบรอบของเราคือ?"
+                       disabled={isCreating}
+                       className="w-full px-6 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
+                     />
+
+                     <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mt-4 mb-2">
+                       ข้อความที่จะแสดงเมื่อใส่รหัสถูก <span className="text-gray-400">(ไม่บังคับ)</span>
+                     </label>
+                     <input
+                       type="text"
+                       value={passcodeMessage}
+                       onChange={(e) => setPasscodeMessage(e.target.value)}
+                       placeholder="เช่น ยินดีด้วยคุณจำได้! เก่งมาก"
+                       disabled={isCreating}
+                       className="w-full px-6 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
+                     />
+                  </motion.div>
+                )}
+              </div>
 
               <div className="space-y-4">
                 <label className="block text-sm font-light text-gray-700 dark:text-gray-300">
@@ -335,7 +420,6 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-
 
               <div className="space-y-4 pt-6 border-t border-gray-200/50 dark:border-gray-800/50">
                 <label className="block text-sm font-medium text-rose-600 dark:text-rose-400">
@@ -430,99 +514,20 @@ export default function Home() {
                 </div>
               </div>
 
-
-              <div className="space-y-3">
-                <label htmlFor="receiver" className="block text-sm font-light text-gray-700 dark:text-gray-300">
-                  ชื่อผู้รับ
-                </label>
-                <input
-                  id="receiver"
-                  type="text"
-                  value={receiverName}
-                  onChange={(e) => setReceiverName(e.target.value)}
-                  placeholder="ชื่อคนพิเศษของคุณ"
-                  disabled={isCreating}
-                  className="w-full px-6 py-4 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 focus:border-transparent transition-all duration-300 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 font-light disabled:opacity-50"
-                />
-              </div>
-
-              
-
               <div className="space-y-3">
                 <label className="block text-sm font-light text-gray-700 dark:text-gray-300">
-                  รหัสลับ 8 หลัก <span className="text-gray-400">(เช่น วันครบรอบ, วันเกิด)</span>
+                  เพลงสื่อความหมาย <span className="text-gray-400">(Link Youtube)</span>
                 </label>
-                <div className="flex gap-2 justify-center">
-                  {[...Array(8)].map((_, i) => (
-                    <div 
-                      key={i}
-                      className={`relative w-10 h-12 rounded-lg border-2 flex items-center justify-center text-lg font-medium transition-all duration-200
-                        ${i < passcode.length 
-                          ? 'border-rose-400 bg-rose-50 text-rose-600 dark:bg-rose-900/20 dark:border-rose-500/50 dark:text-rose-400' 
-                          : 'border-gray-200 bg-white/50 text-gray-400 dark:border-gray-700/50 dark:bg-gray-800/50'}
-                      `}
-                    >
-                      {i < passcode.length ? passcode[i] : ''}
-                      {i === passcode.length && !isCreating && (
-                        <motion.div
-                          layoutId="cursor"
-                          className="absolute inset-0 border-2 border-rose-500 rounded-lg animate-pulse"
-                          transition={{ duration: 0.2 }}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-
                 <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={8}
-                  value={passcode}
-                  onChange={(e) => {
-                    const val = e.target.value.replace(/\D/g, '').slice(0, 8);
-                    setPasscode(val);
-                  }}
-                  className="absolute opacity-0 w-full h-12 -mt-12 cursor-text"
-                  disabled={isCreating}
+                    type="url"
+                    value={youtubeUrl}
+                    onChange={(e) => setYoutubeUrl(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    disabled={isCreating}
+                    className="w-full px-6 py-4 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
                 />
-                <div className="text-center text-xs text-gray-400">
-                  {passcode.length === 0 ? "เพิ่มความปลอดภัยให้การ์ดของคุณ" : `${passcode.length}/8 ตัวเลข`}
-                </div>
-                
-                {passcode.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="pt-2"
-                  >
-                     <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mb-2">
-                       คำถามสำหรับรหัสลับ <span className="text-red-400">*</span>
-                     </label>
-                     <input
-                       type="text"
-                       value={passcodeHint}
-                       onChange={(e) => setPasscodeHint(e.target.value)}
-                       placeholder="เช่น วันครบรอบของเราคือ?"
-                       disabled={isCreating}
-                       className="w-full px-6 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
-                     />
-
-                     <label className="block text-sm font-light text-gray-700 dark:text-gray-300 mt-4 mb-2">
-                       ข้อความที่จะแสดงเมื่อใส่รหัสถูก <span className="text-gray-400">(ไม่บังคับ)</span>
-                     </label>
-                     <input
-                       type="text"
-                       value={passcodeMessage}
-                       onChange={(e) => setPasscodeMessage(e.target.value)}
-                       placeholder="เช่น ยินดีด้วยคุณจำได้! เก่งมาก"
-                       disabled={isCreating}
-                       className="w-full px-6 py-3 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
-                     />
-                  </motion.div>
-                )}
               </div>
-
+            
               <div className="space-y-3">
                 <label htmlFor="message" className="block text-sm font-light text-gray-700 dark:text-gray-300">
                   ข้อความพิเศษ <span className="text-gray-400">(ไม่บังคับ)</span>
@@ -542,19 +547,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="space-y-3">
-                <label className="block text-sm font-light text-gray-700 dark:text-gray-300">
-                  เพลงสื่อความหมาย <span className="text-gray-400">(Link Youtube)</span>
-                </label>
-                <input
-                    type="url"
-                    value={youtubeUrl}
-                    onChange={(e) => setYoutubeUrl(e.target.value)}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                    disabled={isCreating}
-                    className="w-full px-6 py-4 bg-white/50 dark:bg-gray-800/50 border border-gray-300/50 dark:border-gray-700/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500/50 text-gray-900 dark:text-white placeholder-gray-400 font-light text-center"
-                />
-              </div>
+              
 
 
               <motion.button
@@ -592,31 +585,31 @@ export default function Home() {
                       const repository = new SupabaseCardRepository();
                       const createCardUseCase = new CreateCardUseCase(repository);
                       const card = await createCardUseCase.execute({
-                        templateId: "valentine-2026",
-                        senderName: "นินจา",
-                        receiverName: "อร",
-                        passcodeHint: "เลขเรียงกัน 8 ตัว",
-                        passcode: "12345678",
                         isPublic: true,
-                        customMessage: "ขอให้มีความสุขมากๆ นะครับ รักเสมอ ❤️",
-                        passcodeMessage: "มีรูปหน้ารักสำหรับคนน่ารักด้วยนะ..",
-                        youtubeUrl: "https://www.youtube.com/watch?v=sbPGSR-41x8",
+                        templateId: "valentine-2026",
+                        senderName: "{{ ชื่อผู้มอบ }}",
+                        receiverName: "{{ ชื่อผู้รับ }}",
+                        passcodeHint: "{{ หัวข้อข้อความรหัสลับ }}",
+                        passcode: "12345678",
+                        passcodeMessage: "{{ ข้อความเมื่อกรอกรหัสลับถูก }}",
                         images: [
                           "https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=500&auto=format&fit=crop&q=60", 
                           "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=500&auto=format&fit=crop&q=60", 
                           "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=500&auto=format&fit=crop&q=60"
                         ],
-                        imageCaptions: ["เดทแรกของเรา", "ทริปหัวหิน", "เซอร์ไพรส์วันเกิด"],
                         eventImages: [
                           "https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=500&auto=format&fit=crop&q=60",
                           "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=60",
                           "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500&auto=format&fit=crop&q=60"
                         ],
+                        imageCaptions: ["{{ หัวข้อเหตุการณ์ 1 }}", "{{ หัวข้อเหตุการณ์ 2 }}", "{{ หัวข้อเหตุการณ์ 3 }}"],
                         eventDescriptions: [
-                          "วันนี้เป็นวันแรกที่เราเจอกัน จำได้ว่าตื่นเต้นมาก...",
-                          "ทริปนี้สนุกมาก ทะเลสวย อาหารอร่อย และมีเธออยู่ข้างๆ",
-                          "ไม่คิดเลยว่าจะเซอร์ไพรส์สำเร็จ หน้าเหวอมาก 555"
-                        ]
+                          "{{ คำอธิบายเหตุการณ์ 1 }}",
+                          "{{ คำอธิบายเหตุการณ์ 2 }}",
+                          "{{ คำอธิบายเหตุการณ์ 3 }}"
+                        ],
+                        youtubeUrl: "https://www.youtube.com/watch?v=sbPGSR-41x8",
+                        customMessage: "{{ ข้อความพิเศษตอนท้าย }}",
                       });
                       router.push(`/${card.id}`);
                     } catch (e) {
