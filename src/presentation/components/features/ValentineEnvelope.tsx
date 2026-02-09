@@ -538,8 +538,8 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
               exit={{ opacity: 0 }}
             >
               <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden p-6 custom-scrollbar">
-                <div className="min-h-full flex flex-col items-center justify-start md:justify-center py-10 md:py-0">
-                  <div className="w-full max-w-5xl flex flex-col md:flex-row items-center justify-center gap-16 md:gap-12 relative pb-40 md:pb-0">
+                <div className="min-h-full flex flex-col items-center justify-start py-10">
+                  <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-16 relative pb-40">
                     {validEventImages.map((img, index) => (
                       <motion.div
                         key={`card-${index}`}
