@@ -76,13 +76,20 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
+  const [cardsLoaded, setCardsLoaded] = useState(false);
 
   useEffect(() => {
     if (step === 'viewingEventCards') {
       const timer = setTimeout(() => setShowScrollHint(true), 3000);
-      return () => clearTimeout(timer);
+      // Delay rotation animation until cards are loaded
+      const loadTimer = setTimeout(() => setCardsLoaded(true), 1500);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(loadTimer);
+      };
     } else {
         setShowScrollHint(false);
+        setCardsLoaded(false);
     }
   }, [step]);
 
@@ -592,30 +599,31 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden p-6 custom-scrollbar">
+              <div className="absolute inset-0 w-full h-full overflow-y-auto overflow-x-hidden p-6 custom-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <div className="min-h-full flex flex-col items-center justify-start py-10">
                   <div className="w-full max-w-5xl flex flex-col items-center justify-center gap-16 relative pb-40">
                     {validEventImages.map((img, index) => (
                       <motion.div
                         key={`card-${index}`}
-                        initial={{ y: 1000, rotate: (index * 7 % 20) - 10 }}
+                        initial={{ opacity: 0, y: 100 }}
                         animate={{ 
-                            y: 0, 
-                            rotate: [(index % 2 === 0 ? -2 : 2) + (((index * 3) % 5) - 2), 0, (index % 2 === 0 ? -2 : 2) + (((index * 3) % 5) - 2)]
+                            opacity: 1,
+                            y: 0
                         }}
                         transition={{ 
-                            type: "spring", 
-                            stiffness: 60, 
-                            damping: 20, 
-                            delay: index * 0.15,
-                            rotate: { duration: 5, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" } 
+                            duration: 0.6,
+                            delay: index * 0.1,
+                            ease: "easeOut"
                         }}
-                        whileHover={{ scale: 1.05, rotate: 0, zIndex: 50 }}
+                        whileHover={{ scale: 1.05, zIndex: 50 }}
                         onClick={() => handleEventCardClick(index)}
-                        className="relative w-72 h-auto min-h-[420px] bg-[#Fdfbf7] p-5 pb-8 cursor-pointer transform transition-transform duration-300 group shrink-0 flex flex-col will-change-transform"
+                        className="relative w-72 h-auto min-h-[420px] bg-[#Fdfbf7] p-5 pb-8 cursor-pointer group shrink-0 flex flex-col will-change-transform"
                         style={{
                             boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
-                            transform: "translateZ(0)"
+                            transform: cardsLoaded 
+                              ? `translateZ(0) rotate(${(index % 2 === 0 ? -1 : 1) + (((index * 3) % 5) - 2) * 0.5}deg)`
+                              : 'translateZ(0) rotate(0deg)',
+                            transition: 'transform 3s ease-in-out'
                         }}
                       >
                           <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-12 z-20">
