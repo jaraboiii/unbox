@@ -16,6 +16,7 @@ interface ValentineEnvelopeProps {
   imageCaptions?: string[];
   eventDescriptions?: string[];
   youtubeUrl?: string;
+  preview?: boolean;
   onComplete?: () => void;
 }
 
@@ -62,7 +63,7 @@ const MessageOverlay = ({ message, subMessage, onClick }: MessageOverlayProps) =
   </motion.div>
 );
 
-export function ValentineEnvelope({ senderName, receiverName, customMessage, passcode, passcodeHint, passcodeMessage, youtubeUrl, images, eventImages, imageCaptions, eventDescriptions, onComplete }: ValentineEnvelopeProps) {
+export function ValentineEnvelope({ senderName, receiverName, customMessage, passcode, passcodeHint, passcodeMessage, youtubeUrl, images, eventImages, imageCaptions, eventDescriptions, preview, onComplete }: ValentineEnvelopeProps) {
   const [step, setStep] = useState<'sealed' | 'opening' | 'enteringPasscode' | 'showingPasscodeMessage' | 'viewingPhotos' | 'closingEnvelope' | 'preMessage' | 'viewingEventCards' | 'showingMessage' | 'showingMusicMessage' | 'playingMusic' | 'revealed'>('sealed');
   const [selectedEventCard, setSelectedEventCard] = useState<number | null>(null);
   const [finalCardIndex, setFinalCardIndex] = useState(0);
@@ -194,6 +195,22 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
           </motion.div>
         ))}
       </div>
+
+      {preview && (
+        <div className="fixed inset-0 z-[9999] pointer-events-none flex flex-col items-center justify-around opacity-10 select-none overflow-hidden py-10">
+             {[...Array(3)].map((_, i) => (
+               <Image
+                  key={i}
+                  src="/unbox-logo.png" 
+                  alt="Preview Watermark" 
+                  width={400} 
+                  height={400} 
+                  className="object-contain opacity-80 drop-shadow-lg rounded-full"
+                  style={{ transform: i % 2 === 0 ? 'rotate(-15deg)' : 'rotate(15deg)' }}
+               />
+             ))}
+        </div>
+      )}
 
       <div className="relative z-10 flex flex-col items-center w-full px-4">
         {step === 'sealed' && (

@@ -106,6 +106,7 @@ export default function CardPage() {
         eventImages={card.eventImages}
         imageCaptions={card.imageCaptions}
         eventDescriptions={card.eventDescriptions}
+        preview={card.preview}
       />
     );
   }

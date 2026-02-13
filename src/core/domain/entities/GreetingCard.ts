@@ -15,6 +15,7 @@ export interface GreetingCard {
   createdAt: Date;
   viewCount: number;
   isPublic: boolean;
+  preview?: boolean;
 }
 
 export type CreateCardInput = Omit<GreetingCard, 'id' | 'createdAt' | 'viewCount'>;
