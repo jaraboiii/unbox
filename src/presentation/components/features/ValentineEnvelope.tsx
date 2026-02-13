@@ -491,7 +491,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                             src={validImages[currentPhotoIndex]}
                             alt={`Photo ${currentPhotoIndex + 1}`}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                           />
                         ) : null}
                       </div>
@@ -582,7 +582,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                           </div>
 
                           <div className="w-full h-56 bg-gray-100 mb-4 overflow-hidden relative shadow-inner border border-gray-200 shrink-0">
-                            <Image src={img} alt="Memory" fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+                            <Image src={img} alt="Memory" fill className="object-contain transition-transform duration-500 group-hover:scale-110" />
                           </div>
 
                           <div className="flex-grow flex flex-col items-center text-center">
@@ -649,7 +649,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-32 h-8 bg-white/30 rotate-1 backdrop-blur-sm border border-white/20 shadow-sm transform -translate-y-1/2"></div>
 
                        <div className="w-full aspect-square bg-gray-100 mb-6 overflow-hidden relative shadow-inner border border-gray-200">
-                         <Image src={validEventImages[selectedEventCard]} alt="Memory Detail" fill className="object-cover" />
+                         <Image src={validEventImages[selectedEventCard]} alt="Memory Detail" fill className="object-contain" />
                        </div>
 
                        <div className="text-center">
@@ -882,7 +882,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                                       src={img} 
                                       alt={`Event ${idx+1}`} 
                                       fill 
-                                      className="object-cover" 
+                                      className="object-contain" 
                                       sizes="(max-width: 768px) 100vw, 33vw"
                                       quality={90}
                                     />
@@ -938,7 +938,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                       {validImages.slice(0, 3).map((img, i) => (
                         <div key={i} className={`flex-1 aspect-square max-w-[110px] bg-white p-1 shadow-md rounded-xl transform ${i % 2 === 0 ? 'rotate-2' : '-rotate-2'} transition-transform duration-300 z-10`}>
                           <div className="w-full h-full relative overflow-hidden rounded-lg bg-gray-100 border border-gray-100">
-                            <Image src={img} alt="" fill className="object-cover" />
+                            <Image src={img} alt="" fill className="object-contain" />
                           </div>
                         </div>
                       ))}
@@ -995,7 +995,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                             src={validEventImages[selectedEventCard]} 
                             alt="Memory Detail" 
                             fill 
-                            className="object-cover" 
+                            className="object-contain" 
                             quality={100}
                           />
                         </div>

@@ -9,6 +9,9 @@ import { CreateCardUseCase } from "@/core/use-cases/CreateCardUseCase";
 import { compressImage, formatFileSize } from "@/presentation/utils/imageCompressor";
 import Image from "next/image";
 
+import Link from "next/link";
+import { ImageCropperModal } from "@/presentation/components/features/ImageCropperModal";
+
 export default function Home() {
   const router = useRouter();
   const [selectedTemplate, setSelectedTemplate] = useState("valentine-2026");
@@ -27,10 +30,23 @@ export default function Home() {
   const [eventImageLoading, setEventImageLoading] = useState<boolean[]>([false, false, false]);
   const [isCreating, setIsCreating] = useState(false);
 
-  const handleImageUpload = async (index: number, e: ChangeEvent<HTMLInputElement>, isEventImage: boolean = false) => {
+  // Cropper State
+  const [cropper, setCropper] = useState<{
+    isOpen: boolean;
+    imageSrc: string | null;
+    index: number;
+    isEvent: boolean;
+  }>({
+    isOpen: false,
+    imageSrc: null,
+    index: 0,
+    isEvent: false
+  });
+
+
+  const handleImageUpload = (index: number, e: ChangeEvent<HTMLInputElement>, isEventImage: boolean = false) => {
     const file = e.target.files?.[0];
     if (file) {
-
       if (isEventImage) {
         const newLoading = [...eventImageLoading];
         newLoading[index] = true;
@@ -41,26 +57,16 @@ export default function Home() {
         setImageLoading(newLoading);
       }
 
-      try {
-
-        const compressedBase64 = await compressImage(file, 1200, 1200, 0.85);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCropper({
+          isOpen: true,
+          imageSrc: reader.result as string,
+          index,
+          isEvent: isEventImage
+        });
         
-        if (isEventImage) {
-            const newImages = [...eventImages];
-            newImages[index] = compressedBase64;
-            setEventImages(newImages);
-        } else {
-            const newImages = [...images];
-            newImages[index] = compressedBase64;
-            setImages(newImages);
-        }
-        
-        console.log(`Image ${index + 1} compressed: ${formatFileSize(compressedBase64.length)}`);
-      } catch (error) {
-        console.error('Error compressing image:', error);
-        alert('ไม่สามารถประมวลผลรูปภาพได้ กรุณาลองใหม่อีกครั้ง');
-      } finally {
-
+        // Clear loading state as we are now in cropping mode
         if (isEventImage) {
             const newLoading = [...eventImageLoading];
             newLoading[index] = false;
@@ -70,8 +76,28 @@ export default function Home() {
             newLoading[index] = false;
             setImageLoading(newLoading);
         }
-      }
+
+        // Reset input
+        e.target.value = '';
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const handleCropComplete = (base64: string) => {
+    const { index, isEvent } = cropper;
+    
+    if (isEvent) {
+       const newImages = [...eventImages];
+       newImages[index] = base64;
+       setEventImages(newImages);
+    } else {
+       const newImages = [...images];
+       newImages[index] = base64;
+       setImages(newImages);
+    }
+    
+    setCropper(prev => ({ ...prev, isOpen: false }));
   };
 
   const handleCreate = async () => {
@@ -373,7 +399,7 @@ export default function Home() {
                                 src={images[index]}
                                 alt={`Photo ${index + 1}`}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                               />
                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                                 <span className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity">
@@ -447,7 +473,7 @@ export default function Home() {
                                 src={eventImages[index]}
                                 alt={`Event ${index + 1}`}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                               />
                               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
                                 <span className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity font-light">
@@ -681,6 +707,13 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      <ImageCropperModal
+        isOpen={cropper.isOpen}
+        imageSrc={cropper.imageSrc}
+        onClose={() => setCropper(prev => ({ ...prev, isOpen: false }))}
+        onCropComplete={handleCropComplete}
+      />
     </div>
   );
 }

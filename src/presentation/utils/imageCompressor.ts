@@ -21,17 +21,13 @@ export const compressImage = (
         let width = img.width;
         let height = img.height;
 
-        // Calculate new dimensions
-        if (width > height) {
-          if (width > maxWidth) {
-            height = (height * maxWidth) / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width = (width * maxHeight) / height;
-            height = maxHeight;
-          }
+
+
+        // Calculate scale ratio to fit within max dimensions while maintaining aspect ratio
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width = Math.floor(width * ratio);
+          height = Math.floor(height * ratio);
         }
 
         canvas.width = width;
