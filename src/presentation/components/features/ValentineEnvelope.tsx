@@ -957,11 +957,11 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                       ))}
                     </div>
 
-                    <div className="w-full flex items-center justify-center relative my-6 shrink-0">
+                    <div className="w-full flex items-center justify-center relative my-6 shrink-0 max-h-[200px]">
                        {customMessage && (
-                          <div className="relative bg-white/80 p-4 w-full rounded-xl shadow-inner border border-[#FFE4E6]">
+                          <div className="relative bg-white/80 p-4 w-full rounded-xl shadow-inner border border-[#FFE4E6] overflow-y-auto custom-scrollbar max-h-[200px]">
                              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-3 bg-[#FFBBC1]/50 -rotate-1"></div>
-                             <p className="text-base text-[#8B0000] font-light font-handwriting text-center leading-relaxed line-clamp-[7]">
+                             <p className="text-base text-[#8B0000] font-light font-handwriting text-center leading-relaxed">
                                 "{customMessage}"
                              </p>
                           </div>
