@@ -147,11 +147,15 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
       setPhotoDirection(currentPhotoIndex % 2 !== 0 ? -1 : 1);
       setCurrentPhotoIndex(prev => prev + 1);
     } else {
+      // Smooth exit: fade out photo first
       setPhotoDirection(currentPhotoIndex % 2 !== 0 ? -1 : 1);
-      setStep('closingEnvelope');
+      // Small delay to let photo exit animation complete
       setTimeout(() => {
-        setStep('preMessage');
-      }, 1500);
+        setStep('closingEnvelope');
+        setTimeout(() => {
+          setStep('preMessage');
+        }, 1500);
+      }, 400);
     }
   };
 
@@ -495,11 +499,16 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                     exit={{ 
                       y: -250, 
                       x: photoDirection * 200,
-                      scale: 0.8,
+                      scale: 0.5,
                       opacity: 0,
                       rotate: photoDirection * 15
                     }}
-                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 100, 
+                      damping: 20,
+                      opacity: { duration: 0.3 }
+                    }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 w-64 h-64 md:w-80 md:h-80 z-30 cursor-grab active:cursor-grabbing"
                     onClick={handleNextPhoto}
                     drag="y"
@@ -808,11 +817,11 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
               exit={{ opacity: 0, scale: 0.9 }}
             >
               <div className="w-full max-w-sm">
-                <div className="bg-gray-900 rounded-3xl p-6 shadow-2xl border border-gray-800 relative overflow-hidden">
+                  <div className="bg-gray-900 rounded-3xl p-4 md:p-6 shadow-2xl border border-gray-800 relative overflow-hidden">
                   
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-green-500/10 blur-3xl pointer-events-none"></div>
 
-                  <div className="flex justify-between items-center mb-6 text-gray-400">
+                  <div className="flex justify-between items-center my-3 text-gray-400">
                      <span className="text-xs tracking-widest uppercase">Now Playing</span>
                      <div className="flex space-x-1">
                        <span className="w-1 h-1 rounded-full bg-gray-500"></span>
@@ -821,7 +830,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                      </div>
                   </div>
 
-                  <div className="relative aspect-square w-full bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-700 mb-8 group">
+                  <div className="relative aspect-video w-full bg-gray-800 rounded-2xl overflow-hidden shadow-lg border border-gray-700 my-8 group">
                     <iframe
                       width="100%"
                       height="100%"
@@ -833,12 +842,12 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                     ></iframe>
                   </div>
 
-                  <div className="mb-8">
-                     <h3 className="text-white text-2xl font-bold mb-1 truncate">เพลงพิเศษสำหรับ {receiverName}</h3>
-                     <p className="text-gray-400 font-light text-sm">{senderName} มอบเพลงนี้ให้คุณ</p>
+                  <div className="mb-4">
+                     <h3 className="text-white text-lg md:text-xl font-bold mb-1 truncate">เพลงพิเศษสำหรับ {receiverName}</h3>
+                     <p className="text-gray-400 font-light text-xs md:text-sm">{senderName} มอบเพลงนี้ให้คุณ</p>
                   </div>
 
-                  <div className="mb-8">
+                  <div className="mb-4">
                     <div className="relative w-full h-1.5 bg-gray-700 rounded-full overflow-hidden">
                       <motion.div 
                         className="absolute left-0 top-0 h-full bg-green-500"
@@ -853,7 +862,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                     </div>
                   </div>
 
-                  <div className="flex justify-center items-center gap-8 mb-4">
+                  <div className="flex justify-center items-center gap-8 mb-2">
                      <button className="text-gray-400 hover:text-white transition-colors" onClick={handleMusicComplete}>
                         <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" transform="rotate(180)"><path d="M19 12l-7-7-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l7-7z"/></svg>  
                      </button>
