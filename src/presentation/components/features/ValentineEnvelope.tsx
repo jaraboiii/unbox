@@ -604,14 +604,18 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                             rotate: [(index % 2 === 0 ? -2 : 2) + (((index * 3) % 5) - 2), 0, (index % 2 === 0 ? -2 : 2) + (((index * 3) % 5) - 2)]
                         }}
                         transition={{ 
-                            type: "spring", stiffness: 80, damping: 15, delay: index * 0.15,
+                            type: "spring", 
+                            stiffness: 60, 
+                            damping: 20, 
+                            delay: index * 0.15,
                             rotate: { duration: 5, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" } 
                         }}
                         whileHover={{ scale: 1.05, rotate: 0, zIndex: 50 }}
                         onClick={() => handleEventCardClick(index)}
-                        className="relative w-72 h-auto min-h-[420px] bg-[#Fdfbf7] p-5 pb-8 shadow-2xl cursor-pointer transform transition-transform duration-300 group shrink-0 flex flex-col"
+                        className="relative w-72 h-auto min-h-[420px] bg-[#Fdfbf7] p-5 pb-8 cursor-pointer transform transition-transform duration-300 group shrink-0 flex flex-col will-change-transform"
                         style={{
-                            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)"
+                            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1)",
+                            transform: "translateZ(0)"
                         }}
                       >
                           <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-12 z-20">
