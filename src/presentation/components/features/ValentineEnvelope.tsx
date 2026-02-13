@@ -1075,6 +1075,12 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                           size={256}
                           level="H"
                           includeMargin={true}
+                          imageSettings={{
+                            src: "/unbox-logo.png",
+                            height: 50,
+                            width: 50,
+                            excavate: true,
+                          }}
                         />
                       </div>
 
