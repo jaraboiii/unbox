@@ -75,6 +75,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
   const [isPasscodeSuccess, setIsPasscodeSuccess] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     if (step === 'viewingEventCards') {
@@ -87,6 +88,17 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
 
   const validImages = images.filter(Boolean);
   const validEventImages = eventImages?.filter(Boolean) || validImages;
+
+  // Preload next image
+  useEffect(() => {
+    if (step === 'viewingPhotos' && currentPhotoIndex < validImages.length - 1) {
+      const nextImage = new window.Image();
+      nextImage.src = validImages[currentPhotoIndex + 1];
+      nextImage.onload = () => {
+        setImageLoaded(prev => ({ ...prev, [currentPhotoIndex + 1]: true }));
+      };
+    }
+  }, [step, currentPhotoIndex, validImages]);
 
   const handleEnvelopeClick = () => {
     if (step === 'sealed') {
@@ -497,15 +509,28 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                       }
                     }}
                   >
-                    <div className="relative w-full h-full bg-white p-3 rounded-3xl shadow-2xl border-4 border-[#FF6F77]">
-                      <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                    <div className="relative w-full h-full bg-white p-3 rounded-3xl shadow-2xl border-4 border-[#FF6F77]">  
+                      <div className="relative w-full h-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                         {validImages[currentPhotoIndex] ? (
-                          <Image
-                            src={validImages[currentPhotoIndex]}
-                            alt={`Photo ${currentPhotoIndex + 1}`}
-                            fill
-                            className="object-contain"
-                          />
+                          <>
+                            {!imageLoaded[currentPhotoIndex] && (
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <motion.div
+                                  animate={{ rotate: 360 }}
+                                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                  className="w-12 h-12 border-4 border-[#FF6F77] border-t-transparent rounded-full"
+                                />
+                              </div>
+                            )}
+                            <Image
+                              src={validImages[currentPhotoIndex]}
+                              alt={`Photo ${currentPhotoIndex + 1}`}
+                              fill
+                              className="object-contain"
+                              onLoad={() => setImageLoaded(prev => ({ ...prev, [currentPhotoIndex]: true }))}
+                              priority={currentPhotoIndex === 0}
+                            />
+                          </>
                         ) : null}
                       </div>
                     </div>
