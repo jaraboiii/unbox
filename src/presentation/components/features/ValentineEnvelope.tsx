@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { QRCodeCanvas } from "qrcode.react";
 
 interface ValentineEnvelopeProps {
   senderName: string;
@@ -73,6 +74,7 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
   const [isPasscodeError, setIsPasscodeError] = useState(false);
   const [isPasscodeSuccess, setIsPasscodeSuccess] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(false);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   useEffect(() => {
     if (step === 'viewingEventCards') {
@@ -165,6 +167,17 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
 
   const handleMusicComplete = () => {
     setStep('showingMessage');
+  };
+
+  const handleDownloadQR = () => {
+    const canvas = document.getElementById('qr-code-canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = 'valentine-card-qr.png';
+      link.href = url;
+      link.click();
+    }
   };
 
   return (
@@ -1011,6 +1024,72 @@ export function ValentineEnvelope({ senderName, receiverName, customMessage, pas
                       </motion.div>
                     </motion.div>
                   )}
+              </AnimatePresence>
+
+              {/* QR Code Button */}
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                onClick={() => setShowQRCode(true)}
+                className="fixed bottom-8 right-8 z-[60] w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center text-[#FF6F77] hover:bg-[#FFF0F3] transition-colors border-2 border-[#FFBBC1]"
+              >
+                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+              </motion.button>
+
+              {/* QR Code Modal */}
+              <AnimatePresence>
+                {showQRCode && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/60 backdrop-blur-lg"
+                    onClick={() => setShowQRCode(false)}
+                  >
+                    <motion.div
+                      initial={{ scale: 0.8, rotate: -5 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      exit={{ scale: 0.8, rotate: 5 }}
+                      onClick={(e) => e.stopPropagation()}
+                      className="bg-white p-8 rounded-3xl max-w-sm w-full shadow-2xl relative"
+                    >
+                      <button 
+                        onClick={() => setShowQRCode(false)}
+                        className="absolute -top-4 -right-4 w-10 h-10 bg-white rounded-full shadow-lg text-gray-500 hover:text-red-500 flex items-center justify-center text-2xl transition-colors border-2 border-gray-100"
+                      >
+                        ×
+                      </button>
+
+                      <div className="text-center mb-6">
+                        <h3 className="text-2xl font-handwriting text-[#C00000] mb-2">แชร์การ์ด</h3>
+                        <p className="text-sm text-gray-500 font-light">สแกน QR Code เพื่อเปิดการ์ด</p>
+                      </div>
+
+                      <div className="bg-white p-4 rounded-2xl border-4 border-[#FFBBC1] mb-6 flex justify-center">
+                        <QRCodeCanvas
+                          id="qr-code-canvas"
+                          value={typeof window !== 'undefined' ? window.location.href : ''}
+                          size={256}
+                          level="H"
+                          includeMargin={true}
+                        />
+                      </div>
+
+                      <button
+                        onClick={handleDownloadQR}
+                        className="w-full py-3 bg-gradient-to-r from-[#FF6F77] to-[#FF3334] text-white rounded-xl font-medium hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                      >
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        บันทึก QR Code
+                      </button>
+                    </motion.div>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </motion.div>
           )}
